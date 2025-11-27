@@ -10,6 +10,7 @@ import { modeMachine } from "../lib/modeMachine";
 export default function Main() {
 
     const [state, send] = useMachine(modeMachine);
+    
     const [vis, setVis] = useState(false);
     const [visButton, setVisButton] = useState(false);
     const [moveTitle, setMoveTitle] = useState(false);

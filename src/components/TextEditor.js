@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useMachine } from '@xstate/react';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
@@ -16,6 +16,28 @@ export default function TextEditor({ primaryMode }) {
     const editorRef = useRef(null);
     const viewRef = useRef(null);
     const [state, send] = useMachine(editorMachine);
+    const [savedItems, setSavedItems] = useState([]);
+
+    const STORAGE_KEY = 'gospel_ai_history';
+
+    const loadSaved = () => {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            const parsed = raw ? JSON.parse(raw) : [];
+            setSavedItems(parsed);
+        } catch (e) {
+            console.error('Failed to load history from localStorage', e);
+            setSavedItems([]);
+        }
+    };
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        loadSaved();
+        const handler = () => loadSaved();
+        window.addEventListener('gospel_history_updated', handler);
+        return () => window.removeEventListener('gospel_history_updated', handler);
+    }, []);
 
     useEffect(() => {
         if (!editorRef.current) return;
@@ -35,7 +57,6 @@ export default function TextEditor({ primaryMode }) {
                 const newState = view.state.apply(transaction);
                 view.updateState(newState);
                 
-                // Update XState machine with content
                 let content = '';
                 newState.doc.descendants((node) => {
                     if (node.isText) {
@@ -46,6 +67,10 @@ export default function TextEditor({ primaryMode }) {
                 });
                 content = content.trim();
                 
+                if(content === 'undefined'){
+                    content = '';
+                }
+
                 if (content.length > 0) {
                     send({ type: 'TYPE', content });
                 } else {
@@ -60,6 +85,18 @@ export default function TextEditor({ primaryMode }) {
             view.destroy();
         };
     }, [send]);
+
+    useEffect(() => {
+        if (!viewRef.current || primaryMode !== 'random') return;
+        
+        const currentContent = getEditorContent();
+        if (currentContent === '') {
+            const templateText = 'Genre: [...add your intended genre here, for ex: fiction]  \nMood: [...add moods that you want your gospel to reflect, for ex: comedy]';
+            const { state, dispatch } = viewRef.current;
+            const tr = state.tr.insertText(templateText, 0);
+            dispatch(tr);
+        }
+    }, [primaryMode]);
 
     const getEditorContent = () => {
         if (!viewRef.current) return '';
@@ -119,7 +156,7 @@ export default function TextEditor({ primaryMode }) {
                 // Handle 429 rate limit error specifically
                 const errorType = response.status === 429 ? 'rate-limit' : 'general';
                 send({ type: 'ERROR', errorType });
-                throw new Error(data.error || 'Failed to get response');
+                return; // Exit early on error
             }
             
             // Insert AI response into editor
@@ -139,11 +176,38 @@ export default function TextEditor({ primaryMode }) {
         send({ type: 'CLEAR' });
     };
 
+    const handleSaveToHistory = () => {
+        const content = getEditorContent();
+        if (!content.trim()) {
+            alert('Nothing to save!');
+            return;
+        }
+
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            const items = raw ? JSON.parse(raw) : [];
+            const trimmed = content.trim();
+            const newItem = {
+                id: Date.now().toString(),
+                text: trimmed,
+                timestamp: new Date().toISOString(),
+                preview: trimmed.length > 50 ? `${trimmed.substring(0,50)}...` : trimmed
+            };
+            const newItems = [newItem, ...items];
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(newItems));
+            // notify History component(s)
+            window.dispatchEvent(new Event('gospel_history_updated'));
+            alert('Saved to history!');
+        } catch (e) {
+            console.error('Failed to save history', e);
+            alert('Failed to save history');
+        }
+    };
+
     const isDisabled = !primaryMode || primaryMode === 'none';
     const isLoading = state.matches('loading');
     const isError = state.matches('error');
     const isIdle = state.matches('idle');
-    const errorType = state.context.errorType;
 
     return (
         <div className="rounded-3xl bg-black w-full h-screen mx-auto grid grid-cols-4 grid-rows-4 gap-2 p-2">
@@ -160,17 +224,10 @@ export default function TextEditor({ primaryMode }) {
                 {isError && (
                     <div className="absolute inset-0 flex items-center justify-center rounded-2xl p-8">
                         <div className="flex flex-col items-center text-center max-w-md">
-                            {errorType === 'rate-limit' ? (
                                 <>
                                     <p className="text-2xl font-inter font-bold text-red-600 mb-2"> :( </p>
                                     <p className="text-2xl font-inter font-extrabold text-black mb-4">Retry again after some time...</p>
                                 </>
-                            ) : (
-                                <>
-                                    <h3 className="text-2xl font-inter font-bold text-red-600 mb-2">Error Occurred</h3>
-                                    <p className="text-lg font-inter text-gray-700">Something went wrong. Please try again.</p>
-                                </>
-                            )}
                             <button
                                 onClick={() => send({ type: 'DISMISS' })}
                                 className="mt-6 px-6 py-2 bg-white border border-black text-black rounded-lg font-calsans hover:bg-black hover:text-white transition-colors duration-150"
@@ -185,7 +242,7 @@ export default function TextEditor({ primaryMode }) {
                 <div className="w-full h-full flex flex-col justify-center items-center p-2 gap-2">
                     <button
                         onClick={handleContinueWriting}
-                        disabled={isLoading || isDisabled || isIdle}
+                        disabled={isLoading || isDisabled || isIdle || isError}
                         className='font-calsans grow border border-black w-full rounded-xl p-2 hover:bg-black hover:text-white transition-all duration-150 ease-linear scale-100 active:scale-95 transition disabled:opacity-50 disabled:cursor-not-allowed'
                     >
                         {isLoading ? (
@@ -197,8 +254,16 @@ export default function TextEditor({ primaryMode }) {
                     </button>
 
                     <button
+                        onClick={handleSaveToHistory}
+                        disabled={isLoading || isDisabled || isIdle || isError}
+                        className='font-calsans border border-black w-full rounded-xl p-2 hover:bg-green-500 hover:text-white transition-all duration-150 ease-linear scale-100 active:scale-95 transition disabled:opacity-50 disabled:cursor-not-allowed'
+                    >
+                        SAVE
+                    </button>
+
+                    <button
                         onClick={handleReset}
-                        disabled={isLoading || isDisabled}
+                        disabled={isLoading || isDisabled || isError}
                         className='font-calsans border border-black w-full rounded-xl p-2 hover:bg-red-500 hover:text-white transition-all duration-150 ease-linear scale-100 active:scale-95 transition disabled:opacity-50 disabled:cursor-not-allowed'
                     >
                         RESET
@@ -206,7 +271,7 @@ export default function TextEditor({ primaryMode }) {
                 </div>
             </div>
             <div className={`col-span-1 row-span-3 bg-white rounded-2xl ${isDisabled ? 'opacity-80' : ''}`}>
-                <History />
+                <History items={savedItems} />
             </div>
 
             <style jsx global>{`

@@ -20,7 +20,7 @@ export async function POST(request) {
         'X-Title': 'Gospel AI',
       },
       body: JSON.stringify({
-        model: 'meta-llama/llama-3.2-3b-instruct:free',
+        model: 'x-ai/grok-4.1-fast:free',
         messages: [
           {
             role: 'system',
@@ -35,14 +35,15 @@ export async function POST(request) {
                         -Do NOT include the word count in the output.
                         -Do NOT mention these rules.
                         -Do NOT repeat the user’s input verbatim—adapt it naturally into the narrative.
-                        -Output only the story.
+                        -Do NOT repeat the user's input (STRICTLY)
+                        -Output only the remaining story, without the input text from the user.
 
                         User Prompt Template:
 
                         Input lines:
                         {{USER_INPUT}}
 
-                        Continue the story.
+                        Strictly continue the story starting from the input words.
                     `
           },
           {

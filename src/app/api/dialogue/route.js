@@ -20,7 +20,7 @@ export async function POST(request) {
         'X-Title': 'Gospel AI',
       },
       body: JSON.stringify({
-        model: 'meta-llama/llama-3.2-3b-instruct:free',
+        model: 'x-ai/grok-4.1-fast:free',
         messages: [
           {
             role: 'system',
@@ -35,12 +35,14 @@ export async function POST(request) {
                         -Avoid adding extra sentences beyond the needed continuation.   
                         -Do NOT alter the user’s text except for the required completion.
                         -Do NOT include explanations—output only the completed sentence or dialogue.
-
+                        -Do NOT repeat the user's input (STRICTLY)
+                        -Output only the remaining story, without the input text from the user.
+                        
                         User Prompt Template:
                         Context:
                         {{USER_INPUT}}
 
-                        Complete the sentence/dialogue.
+                        Strictly complete the sentence/dialogue starting from the input words.
                     `
           },
           {

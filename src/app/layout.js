@@ -12,7 +12,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Cal Sans needs to be loaded as a local font since it's not available on Google Fonts
 const calSans = Cal_Sans({
   variable: "--font-calsans",
   weight: "400",

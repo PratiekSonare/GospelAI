@@ -20,7 +20,7 @@ export async function POST(request) {
         'X-Title': 'Gospel AI',
       },
       body: JSON.stringify({
-        model: 'meta-llama/llama-3.2-3b-instruct:free',
+        model: 'x-ai/grok-4.1-fast:free',
         messages: [
           {
             role: 'system',
