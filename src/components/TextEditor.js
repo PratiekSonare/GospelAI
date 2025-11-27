@@ -86,16 +86,34 @@ export default function TextEditor({ primaryMode }) {
         };
     }, [send]);
 
+    // Clear editor when mode changes, then insert template if mode is 'random'
+    const prevPrimaryRef = useRef(primaryMode);
     useEffect(() => {
-        if (!viewRef.current || primaryMode !== 'random') return;
+        if (!viewRef.current) return;
         
-        const currentContent = getEditorContent();
-        if (currentContent === '') {
-            const templateText = 'Genre: [...add your intended genre here, for ex: fiction]  \nMood: [...add moods that you want your gospel to reflect, for ex: comedy]';
-            const { state, dispatch } = viewRef.current;
-            const tr = state.tr.insertText(templateText, 0);
-            dispatch(tr);
+        const prev = prevPrimaryRef.current;
+        
+        // If mode changed from a previous valid mode, reset the editor first
+        if (prev && prev !== primaryMode && prev !== 'none') {
+            handleReset();
         }
+        
+        // After reset (or on initial mount), insert template if mode is 'random'
+        if (primaryMode === 'random') {
+            // Give a small delay to ensure reset completes
+            setTimeout(() => {
+                if (!viewRef.current) return;
+                const currentContent = getEditorContent();
+                if (currentContent === '') {
+                    const templateText = 'Genre: [...add your intended genre here, for ex: fiction]  \nMood: [...add moods that you want your gospel to reflect, for ex: comedy]';
+                    const { state, dispatch } = viewRef.current;
+                    const tr = state.tr.insertText(templateText, 0);
+                    dispatch(tr);
+                }
+            }, 0);
+        }
+        
+        prevPrimaryRef.current = primaryMode;
     }, [primaryMode]);
 
     const getEditorContent = () => {

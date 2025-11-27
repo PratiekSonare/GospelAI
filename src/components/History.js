@@ -58,7 +58,7 @@ export default function History({ items: initialItems = [] }) {
     return (
         <div className="p-2 h-full w-full flex flex-col gap-2">
             <div className="flex flex-col gap-0 justify-center items-center mb-2">
-                <span className="font-calsans text-2xl block w-fit mx-auto">HISTORY</span>
+                <span className="font-calsans text-xl block w-fit mx-auto">HISTORY</span>
                 {items.length > 0 && (
                     <button
                         onClick={handleClearAll}
@@ -72,7 +72,7 @@ export default function History({ items: initialItems = [] }) {
             <div className="overflow-y-auto flex flex-col gap-2 flex-1">
                 {items.length === 0 ? (
                     <div className="text-center text-gray-400 font-inter text-sm mt-8">
-                        No history yet.<br />Saved texts will appear here.
+                        No history yet.<br />Saved stories will appear here.
                     </div>
                 ) : (
                     items.map((item) => (
