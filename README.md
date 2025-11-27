@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+**Pratiek Sonare (22B2440)**
+============================
 
-## Getting Started
+**Final Year Undergraduate --- IIT Bombay**
 
-First, run the development server:
+My go-to bread & butter language for web development projects is **JavaScript**, and in this repository I've explored refactoring the project into two parts --- one implemented with **JS** and the other with **TS**.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+* * * * *
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Stack Used**
+--------------
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+-   **Next.js (React)**
+-   **JavaScript-based scripting**
+-   **XState Engine** (state management machines)
+-   **ProseMirror** (text editor)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+* * * * *
 
-## Learn More
+**Running This Locally**
+------------------------
 
-To learn more about Next.js, take a look at the following resources:
+1.  **Clone this repo**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2.  Navigate to the project directory
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3.  Run:
 
-## Deploy on Vercel
+`npm install && npm run dev`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1.  Open your browser and visit **<http://localhost:3000>** (or whichever port it starts on)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* * * * *
