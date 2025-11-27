@@ -9,9 +9,20 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@xstate/react": "^6.0.0",
+    "axios": "^1.13.2",
+    "dotenv": "^17.2.3",
     "next": "16.0.4",
+    "prosemirror-commands": "^1.7.1",
+    "prosemirror-history": "^1.5.0",
+    "prosemirror-keymap": "^1.2.3",
+    "prosemirror-model": "^1.25.4",
+    "prosemirror-schema-basic": "^1.2.4",
+    "prosemirror-state": "^1.4.4",
+    "prosemirror-view": "^1.41.3",
     "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react-dom": "19.2.0",
+    "xstate": "^5.24.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

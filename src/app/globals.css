@@ -1,3 +1,4 @@
+
 @import "tailwindcss";
 
 :root {
@@ -8,8 +9,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-bebas: var(--font-bebas);
+  --font-calsans: var(--font-calsans);
+  --font-inter: var(--font-inter);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,4 +25,58 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+#menu-list::-webkit-scrollbar {
+  width: 10px;
+}
+
+#menu-list::-webkit-scrollbar-track {
+  background: transparent;
+  /* border: 1px solid black; */
+  margin: 10px 5px 10px 0px;
+  border-radius: 8px;
+}
+
+#menu-list::-webkit-scrollbar-thumb {
+  background: white;
+  border: 2px solid black;
+  border-radius: 8px;
+}
+
+span img {
+  user-select: none;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+@keyframes scroll-x {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-scroll-x {
+  animation: scroll-x 10s linear infinite;
+  will-change: transform;
+}
+
+.group:hover .animate-scroll-x {
+  animation-play-state: paused;
 }
