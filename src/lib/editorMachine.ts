@@ -1,8 +1,25 @@
 import { createMachine, assign } from 'xstate';
 
+interface EditorContext {
+  content: string;
+  errorType: string | null;
+}
+
+type EditorEvent =
+  | { type: 'TYPE'; content: string }
+  | { type: 'CLEAR' }
+  | { type: 'SUBMIT' }
+  | { type: 'SUCCESS' }
+  | { type: 'ERROR'; errorType?: string }
+  | { type: 'DISMISS' };
+
 export const editorMachine = createMachine({
   id: 'editor',
   initial: 'idle',
+  types: {} as {
+    context: EditorContext;
+    events: EditorEvent;
+  },
   context: {
     content: '',
     errorType: null,
@@ -13,7 +30,7 @@ export const editorMachine = createMachine({
         TYPE: {
           target: 'active',
           actions: assign({
-            content: (context, event) => event?.content || ''
+            content: ({ event }) => event.content || ''
           })
         }
       }
@@ -22,7 +39,7 @@ export const editorMachine = createMachine({
       on: {
         TYPE: {
           actions: assign({
-            content: (context, event) => event?.content || ''
+            content: ({ event }) => event.content || ''
           })
         },
         CLEAR: {
@@ -46,7 +63,7 @@ export const editorMachine = createMachine({
         ERROR: {
           target: 'error',
           actions: assign({
-            errorType: (context, event) => event?.errorType || 'general'
+            errorType: ({ event }) => event.errorType || 'general'
           })
         }
       }

@@ -1,9 +1,28 @@
 import { NextResponse } from 'next/server';
 
-export async function POST(request) {
+interface RequestBody {
+  content: string;
+}
+
+interface OpenRouterResponse {
+  choices: Array<{
+    message: {
+      content: string;
+    };
+  }>;
+}
+
+interface OpenRouterError {
+  error?: {
+    message?: string;
+  };
+}
+
+export async function POST(request: Request) {
   try {
-    const { content } = await request.json();
+    const { content }: RequestBody = await request.json();
     console.log(`Received content for continuation: ${content}`);
+    
     if (!content || typeof content !== 'string') {
       return NextResponse.json(
         { error: 'Content is required' },
@@ -25,24 +44,25 @@ export async function POST(request) {
           {
             role: 'system',
             content: `System Prompt:
-                        You are a precise dialogue-completion assistant.
-                        Your task is to complete a sentence or dialogue using the context provided by the user.
+                        You are a precise story-writing assistant.
+                        Your task is to create a 100-word open-ended story inspired by the user's input lines.
                         
-                        Follow these rules strictly:
-                        -Complete only the missing part indicated by the user (e.g., inside brackets).
-                        -Maintain the tone, intent, and context of the given lines.
-                        -Keep the completion natural, coherent, and contextually appropriate.
-                        -Avoid adding extra sentences beyond the needed continuation.   
-                        -Do NOT alter the user’s text except for the required completion.
-                        -Do NOT include explanations—output only the completed sentence or dialogue.
+                        Follow the rules strictly:
+                        -The story must be exactly 100 words.
+                        -It must be open-ended (no complete conclusion; leave anticipation).
+                        -It must be coherent, creative, and natural.
+                        -Do NOT include the word count in the output.
+                        -Do NOT mention these rules.
+                        -Do NOT repeat the user's input verbatim—adapt it naturally into the narrative.
                         -Do NOT repeat the user's input (STRICTLY)
                         -Output only the remaining story, without the input text from the user.
-                        
+
                         User Prompt Template:
-                        Context:
+
+                        Input lines:
                         {{USER_INPUT}}
 
-                        Strictly complete the sentence/dialogue starting from the input words.
+                        Strictly continue the story starting from the input words.
                     `
           },
           {
@@ -54,14 +74,14 @@ export async function POST(request) {
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData: OpenRouterError = await response.json();
       return NextResponse.json(
         { error: errorData.error?.message || 'OpenRouter API error' },
         { status: response.status }
       );
     }
 
-    const data = await response.json();
+    const data: OpenRouterResponse = await response.json();
     const aiResponse = data.choices[0]?.message?.content || '';
 
     return NextResponse.json({ response: aiResponse });

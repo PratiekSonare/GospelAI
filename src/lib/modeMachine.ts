@@ -1,8 +1,16 @@
 import { createMachine } from 'xstate';
 
+type ModeEvent =
+  | { type: 'SELECT_STORY' }
+  | { type: 'SELECT_DIALOGUE' }
+  | { type: 'SELECT_RANDOM' };
+
 export const modeMachine = createMachine({
   id: 'mode',
   initial: 'none',
+  types: {} as {
+    events: ModeEvent;
+  },
   states: {
     none: {
       on: {

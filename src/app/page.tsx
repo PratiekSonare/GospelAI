@@ -6,15 +6,16 @@ import { useState, useEffect, useRef } from "react";
 
 export default function Home() {
 
-  const [scroll, setScroll] = useState(0);
-  const mainContentRef = useRef(null);
+  const [scroll, setScroll] = useState<boolean>(false);
+  const mainContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const div = mainContentRef.current;
 
+    if (!div) return;
+
     const handleScroll = () => {
       if (div.scrollTop > 2) {
-        // alert(`heres the`)
         setScroll(true)
       } else {
         setScroll(false);

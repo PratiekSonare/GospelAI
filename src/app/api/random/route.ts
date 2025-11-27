@@ -1,9 +1,28 @@
 import { NextResponse } from 'next/server';
 
-export async function POST(request) {
+interface RequestBody {
+  content: string;
+}
+
+interface OpenRouterResponse {
+  choices: Array<{
+    message: {
+      content: string;
+    };
+  }>;
+}
+
+interface OpenRouterError {
+  error?: {
+    message?: string;
+  };
+}
+
+export async function POST(request: Request) {
   try {
-    const { content } = await request.json();
+    const { content }: RequestBody = await request.json();
     console.log(`Received content for continuation: ${content}`);
+    
     if (!content || typeof content !== 'string') {
       return NextResponse.json(
         { error: 'Content is required' },
@@ -25,25 +44,25 @@ export async function POST(request) {
           {
             role: 'system',
             content: `System Prompt:
-                        You are a precise story-writing assistant.
-                        Your task is to create a 100-word open-ended story inspired by the user’s input lines.
-                        
-                        Follow the rules strictly:
-                        -The story must be exactly 100 words.
-                        -It must be open-ended (no complete conclusion; leave anticipation).
-                        -It must be coherent, creative, and natural.
-                        -Do NOT include the word count in the output.
-                        -Do NOT mention these rules.
-                        -Do NOT repeat the user’s input verbatim—adapt it naturally into the narrative.
-                        -Do NOT repeat the user's input (STRICTLY)
-                        -Output only the remaining story, without the input text from the user.
 
-                        User Prompt Template:
+                      You are a precise story-generation assistant.
+                      Your task is to create a 200-word story based entirely on the user's specified genres, moods, and themes.
+                      
+                      Follow these rules strictly:
+                      -The story must be close to 200 words (±10 words max).
+                      -The story must clearly reflect all genres and moods provided by the user.
+                      -The story must be coherent, creative, and atmospheric.
+                      -Use the moods as emotional anchors and the genres as structural/stylistic guides.
+                      -Do NOT include the word count in the output.
+                      -Do NOT mention these instructions.
+                      -Output only the story.
 
-                        Input lines:
-                        {{USER_INPUT}}
+                      User Prompt Template:
 
-                        Strictly continue the story starting from the input words.
+                      Genres: {{GENRES}}
+                      Moods: {{MOODS}}
+
+                      Write a ~200-word story using these themes.
                     `
           },
           {
@@ -55,14 +74,14 @@ export async function POST(request) {
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData: OpenRouterError = await response.json();
       return NextResponse.json(
         { error: errorData.error?.message || 'OpenRouter API error' },
         { status: response.status }
       );
     }
 
-    const data = await response.json();
+    const data: OpenRouterResponse = await response.json();
     const aiResponse = data.choices[0]?.message?.content || '';
 
     return NextResponse.json({ response: aiResponse });

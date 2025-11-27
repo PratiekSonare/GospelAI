@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter, Bebas_Neue, Cal_Sans } from "next/font/google";
 import "./globals.css";
 import "prosemirror-view/style/prosemirror.css";
@@ -32,12 +33,16 @@ const inter = Inter({
   display: "swap",
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Gospel AI",
   description: "Generated for ChronicleHQ",
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="en">
       <body
