@@ -7,7 +7,7 @@
 
 **Final Year Undergraduate --- IIT Bombay**
 
-My go-to bread & butter language for web development projects is **JavaScript**, and in this repository I've explored refactoring the project into two parts --- one implemented with **JS** and the other with **TS**.
+My go-to bread & butter language for web development projects is **JavaScript**, and in this repository I've explored refactoring the project into two parts --- one implemented with **JS** (main) and the other with **TS** (alt).
 
 * * * * *
 
