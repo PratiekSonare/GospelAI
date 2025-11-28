@@ -20,7 +20,7 @@ export async function POST(request) {
         'X-Title': 'Gospel AI',
       },
       body: JSON.stringify({
-        model: 'x-ai/grok-4.1-fast:free',
+        model: 'tngtech/tng-r1t-chimera:free',
         messages: [
           {
             role: 'system',

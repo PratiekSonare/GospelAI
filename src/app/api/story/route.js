@@ -14,13 +14,13 @@ export async function POST(request) {
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer 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`,
+        'Authorization': `Bearer ${process.env.NEXT_PUBLIC_OPENROUTER_API_KEY}`,
         'Content-Type': 'application/json',
         'HTTP': process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
         'X-Title': 'Gospel AI',
       },
       body: JSON.stringify({
-        model: 'x-ai/grok-4.1-fast:free',
+        model: 'tngtech/tng-r1t-chimera:free',
         messages: [
           {
             role: 'system',
