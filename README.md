@@ -1,5 +1,6 @@
 
-<img width="6000" height="3375" alt="logo" src="https://github.com/user-attachments/assets/00b46cec-56be-420d-8b64-88f189e41fe7" />
+<img width="6000" height="3375" alt="logo_invert" src="https://github.com/user-attachments/assets/4ae9577d-d24f-435b-b5a0-29cd32b26353" />
+
 
 **Pratiek Sonare (22B2440)**
 ============================
@@ -11,6 +12,7 @@ My go-to bread & butter language for web development projects is **JavaScript**,
 * * * * *
 
 **Motive**
+
 A simple, minimilistic monochrome AI based writer assistant with different modes for enhancing contextual creative literature!
 Equipped with:
 -  Story Mode (for a 100 word story, based on query)
