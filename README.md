@@ -1,3 +1,6 @@
+
+<img width="6000" height="3375" alt="logo" src="https://github.com/user-attachments/assets/00b46cec-56be-420d-8b64-88f189e41fe7" />
+
 **Pratiek Sonare (22B2440)**
 ============================
 
@@ -6,6 +9,19 @@
 My go-to bread & butter language for web development projects is **JavaScript**, and in this repository I've explored refactoring the project into two parts --- one implemented with **JS** and the other with **TS**.
 
 * * * * *
+
+**Motive**
+A simple, minimilistic monochrome AI based writer assistant with different modes for enhancing contextual creative literature!
+Equipped with:
+-  Story Mode (for a 100 word story, based on query)
+-  Dialogue Mode (given a context, generate what the next dialogue of the protagonist must be)
+-  Random Mode (generate a 200 word short story for your intended genre and mood!)
+
+**Screenshots**
+<img width="1541" height="806" alt="localhost_3000_" src="https://github.com/user-attachments/assets/5eb39db8-335b-404a-93c7-af9e13b679ac" />
+
+<img width="1541" height="806" alt="localhost_3000_ (1)" src="https://github.com/user-attachments/assets/2b3bd9ad-47a0-4970-abc0-b745ab802962" />
+
 
 **Stack Used**
 --------------
